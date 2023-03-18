@@ -53,8 +53,6 @@ int main(){
         }
         */
     }
-    
-    cout << "this is the last line!" << endl;
 
     return 0;
 }
