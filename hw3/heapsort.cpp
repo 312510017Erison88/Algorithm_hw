@@ -31,14 +31,12 @@ void MaxHeapify(int *arr, int n, int i){
     if(left<n && arr[left]>arr[largest]){
         largest = left;
     }
-
     // if right child is larger than largest so far
     if (right<n && arr[right]>arr[largest]) {
         largest = right;
     }
-
     // if largest is not root
-    if (largest != i) {
+    if (largest!=i){
         swap(arr[i], arr[largest]);
         MaxHeapify(arr, n, largest);    // recursively heapify the affected sub-tree
     }
@@ -54,8 +52,14 @@ void Build_Max_Heap(int *arr, int n){
 void Heapsort(int *arr, int n){
     Build_Max_Heap(arr, n);
     // one by one extract an element from heap
+    /*
     for (int i=n-1; i>=1; i--){
         swap(arr[0], arr[i]);   // move current root to end
         MaxHeapify(arr, i, 0);  // call max heapify on the reduced heap
     }
+    */
 }
+/*
+將Max-heap的root與最後一個節點交換，並排除最後一個節點，
+剩下的數列仍是一個Max-heap。重複此操作，每次將剩下的節點轉化為Max-heap，直到數列被完全排序
+*/
