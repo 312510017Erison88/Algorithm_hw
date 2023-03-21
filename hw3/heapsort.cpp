@@ -21,14 +21,15 @@ int main(int argc, char ** argv){
         START = clock();
         Heapsort(a, size);
         END = clock();
-        cout << "整個程式執行時間:" << (double)clock()/CLOCKS_PER_SEC << " S" << endl;
-        cout << "heapsort fuction進行運算的執行時間:" << (END-START) / CLOCKS_PER_SEC << " S" << endl;
         //print a[]
-        
+        /*
         for(int i=0; i<size; i++){
             cout << a[i] << " ";
         }
         cout << endl;
+        */
+        cout << "整個程式執行時間: " << (double)clock()/CLOCKS_PER_SEC << " S" << endl;
+        cout << "heapsort fuction進行運算的執行時間: " << (END-START) / CLOCKS_PER_SEC << " S" << endl;
         
         delete [] a;
         a = NULL;
@@ -40,15 +41,14 @@ int main(int argc, char ** argv){
 
 void MaxHeapify(int *arr, int n, int i){
     int largest = i;
-    int left = 2*i+1;   
-    int right = 2*i+2;
-
+    int left = 2*i+1;   // left child
+    int right = 2*i+2;  // right child
     // if left child is larger than root
     if(left<n && arr[left]>arr[largest]){
         largest = left;
     }
     // if right child is larger than largest so far
-    if (right<n && arr[right]>arr[largest]) {
+    if (right<n && arr[right]>arr[largest]){
         largest = right;
     }
     // if largest is not root
@@ -68,12 +68,12 @@ void Build_Max_Heap(int *arr, int n){
 void Heapsort(int *arr, int n){
     Build_Max_Heap(arr, n);
     // one by one extract an element from heap
-    for (int i=n-1; i>=1; i--){
+    for(int i=n-1; i>=1; i--){
         swap(arr[0], arr[i]);   // move current root to end
         MaxHeapify(arr, i, 0);  // call max heapify on the reduced heap
     }
 }
 /*
-將Max-heap的root與最後一個節點交換，並排除最後一個節點，
+Heapsort fuction將Max-heap的root與最後一個節點交換，並排除最後一個節點，
 剩下的數列仍是一個Max-heap。重複此操作，每次將剩下的節點轉化為Max-heap，直到數列被完全排序
 */
