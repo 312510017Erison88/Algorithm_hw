@@ -23,28 +23,17 @@ int main(int argc, char ** argv){
         END = clock();
         cout << "整個程式執行時間:" << (double)clock()/CLOCKS_PER_SEC << " S" << endl;
         cout << "heapsort fuction進行運算的執行時間:" << (END-START) / CLOCKS_PER_SEC << " S" << endl;
-        delete [] a;
-        a = NULL;
         //print a[]
-        /*
+        
         for(int i=0; i<size; i++){
             cout << a[i] << " ";
         }
         cout << endl;
-        */
+        
+        delete [] a;
+        a = NULL;
+        cout << "Input an integer for an array size, and press crtl+d to exit:";
     }
-    /////////////////////////////////////////
-    /*
-    int a[7] = {1,2,5,3,4,7,6};
-
-    Heapsort(a, 7);
-    //print a[]
-    for(int i=0; i<7; i++){
-        cout << a[i] << " ";
-    }
-    cout << endl;
-*/
-    cout << "this is the the last line!" << endl;
 
     return 0;
 }
