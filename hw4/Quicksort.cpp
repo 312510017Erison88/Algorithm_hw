@@ -12,7 +12,7 @@ int main(){
         cout << a[i] << " ";
     }
     cout << endl;
-    cout << "hi" << endl;
+    
     return 0;
 }
 
