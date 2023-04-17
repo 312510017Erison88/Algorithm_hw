@@ -10,9 +10,9 @@ int Randomized_Partition(int* arr, int low, int high);
 int Randomized_Pick(int low, int high);
 
 int main(){
-    int a[5] = {2,4,5,1,3};
-    RM_QuickSort(a, 0, 4);
-    for(int i=0; i<5; i++){
+    int a[10] = {2,4,5,1,3,3,7,6,8,9};
+    RM_QuickSort(a, 0, 9);
+    for(int i=0; i<10; i++){
         cout << a[i] << " ";
     }
     cout << endl;
@@ -36,7 +36,6 @@ int Partition(int* arr, int low, int high){
         // if current element <= pivot, then put it to smaller element section
         if(arr[j]<=pivot){
             i++;
-            //cout << "i=" << i << endl;
             swap(arr[i], arr[j]);
         }
     }
@@ -45,18 +44,20 @@ int Partition(int* arr, int low, int high){
 }
 
 int Randomized_Partition(int* arr, int low, int high){
-    int i = Randomized_Pick(low, high);
-    cout << i << endl;
-    swap(arr[i], arr[high]);
+    int i = Randomized_Pick(low, high); // make i be a random number betwwen low to high
+    cout << "Random position is " << i << endl;
+    swap(arr[i], arr[high]);            // make pivot be random number from the array
     return Partition(arr, low, high);
 }
 
-int Randomized_Pick(int low, int high){
+int Randomized_Pick(int low, int high){    // return a random number between low and high
     int n = (high-low)+1;
     srand(time(NULL));
     int RanIndex = rand() % n; 
     return RanIndex+low;
 }
+
+
 /*
 Partition function是Quick sort演算法的核心，其功能是將數列劃分成兩個部分，一部分是小於等於基準點的元素，另一部分是大於基準點的元素。Partition function的實現方法有很多種，以下是一種簡單的方法：
 1.將最右邊的元素設為pivot。
