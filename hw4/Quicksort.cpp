@@ -10,12 +10,40 @@ int Randomized_Partition(int* arr, int low, int high);
 int Randomized_Pick(int low, int high);
 
 int main(){
+/*
     int a[10] = {2,4,5,1,3,3,7,6,8,9};
     RM_QuickSort(a, 0, 9);
     for(int i=0; i<10; i++){
         cout << a[i] << " ";
     }
     cout << endl;
+*/
+    double START, END;
+    int size;
+    cout << "Input an integer for an array size, and press crtl+d to exit:";
+    while(cin >> size){
+        int *a = new int[size];
+        srand(time(NULL));
+        for(int i=0; i<size; i++){
+            a[i] = rand()%size;
+        }
+        START = clock();
+        RM_QuickSort(a, 0, size);
+        END = clock();
+        //print a[]
+        /*
+        for(int i=0; i<size; i++){
+            cout << a[i] << " ";
+        }
+        cout << endl;
+        */
+        cout << "整個程式執行時間: " << (double)clock()/CLOCKS_PER_SEC << " S" << endl;
+        cout << "heapsort fuction進行運算的執行時間: " << (END-START) / CLOCKS_PER_SEC << " S" << endl;
+        
+        delete [] a;
+        a = NULL;
+        cout << "Input an integer for an array size, and press crtl+d to exit:";
+    }
     
     return 0;
 }
