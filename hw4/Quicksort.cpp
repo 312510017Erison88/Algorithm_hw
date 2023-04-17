@@ -1,13 +1,17 @@
 #include <iostream>
+#include <stdlib.h>
+#include <time.h>
 
 using namespace std;
 
-void QuickSort(int* arr, int low, int high);
+void RM_QuickSort(int* arr, int low, int high);
 int Partition(int* arr, int low, int high);
+int Randomized_Partition(int* arr, int low, int high);
+int Randomized_Pick(int low, int high);
 
 int main(){
     int a[5] = {2,4,5,1,3};
-    QuickSort(a, 0, 4);
+    RM_QuickSort(a, 0, 4);
     for(int i=0; i<5; i++){
         cout << a[i] << " ";
     }
@@ -16,11 +20,11 @@ int main(){
     return 0;
 }
 
-void QuickSort(int* arr, int low, int high){
+void RM_QuickSort(int* arr, int low, int high){
     if(low<high){
-        int pi = Partition(arr, low, high);  // calculate Partition position
-        QuickSort(arr, low, pi-1);  //  sort Partition leftside recursively
-        QuickSort(arr, pi+1, high);  // sort Partition rightside recursively
+        int pi = Randomized_Partition(arr, low, high);  // calculate Partition position
+        RM_QuickSort(arr, low, pi-1);  //  sort Partition leftside recursively
+        RM_QuickSort(arr, pi+1, high);  // sort Partition rightside recursively
     }
 }
 
@@ -32,18 +36,26 @@ int Partition(int* arr, int low, int high){
         // if current element <= pivot, then put it to smaller element section
         if(arr[j]<=pivot){
             i++;
-            cout << "i=" << i << endl;
+            //cout << "i=" << i << endl;
             swap(arr[i], arr[j]);
         }
     }
     swap(arr[i+1], arr[high]);  // put pivot to position i+1 
-    /*
-    for(int i=0; i<5; i++){
-        cout << arr[i] << " ";
-    }
-    cout << endl;
-    */
     return i+1;
+}
+
+int Randomized_Partition(int* arr, int low, int high){
+    int i = Randomized_Pick(low, high);
+    cout << i << endl;
+    swap(arr[i], arr[high]);
+    return Partition(arr, low, high);
+}
+
+int Randomized_Pick(int low, int high){
+    int n = (high-low)+1;
+    srand(time(NULL));
+    int RanIndex = rand() % n; 
+    return RanIndex+low;
 }
 /*
 Partition function是Quick sort演算法的核心，其功能是將數列劃分成兩個部分，一部分是小於等於基準點的元素，另一部分是大於基準點的元素。Partition function的實現方法有很多種，以下是一種簡單的方法：
