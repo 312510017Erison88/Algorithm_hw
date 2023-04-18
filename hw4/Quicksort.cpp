@@ -31,12 +31,12 @@ int main(){
         RM_QuickSort(a, 0, size-1);
         END = clock();
         //print a[]
-        
+        /*
         for(int i=0; i<size; i++){
             cout << a[i] << " ";
         }
         cout << endl;
-        
+        */
         cout << "整個程式執行時間: " << (double)clock()/CLOCKS_PER_SEC << " S" << endl;
         cout << "heapsort fuction進行運算的執行時間: " << (END-START) / CLOCKS_PER_SEC << " S" << endl;
         
@@ -73,7 +73,6 @@ int Partition(int* arr, int low, int high){
 
 int Randomized_Partition(int* arr, int low, int high){
     int i = Randomized_Pick(low, high); // make i be a random number betwwen low to high
-    cout << "Random position is " << i << endl;
     swap(arr[i], arr[high]);            // make pivot be random number from the array
     return Partition(arr, low, high);
 }
