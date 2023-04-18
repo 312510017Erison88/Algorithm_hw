@@ -28,15 +28,15 @@ int main(){
             a[i] = rand()%size;
         }
         START = clock();
-        RM_QuickSort(a, 0, size);
+        RM_QuickSort(a, 0, size-1);
         END = clock();
         //print a[]
-        /*
+        
         for(int i=0; i<size; i++){
             cout << a[i] << " ";
         }
         cout << endl;
-        */
+        
         cout << "整個程式執行時間: " << (double)clock()/CLOCKS_PER_SEC << " S" << endl;
         cout << "heapsort fuction進行運算的執行時間: " << (END-START) / CLOCKS_PER_SEC << " S" << endl;
         
