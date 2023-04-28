@@ -7,7 +7,6 @@ struct node{
     node* parent;
     node* left;
     node* right;
-    node* parent;
 };
 
 //method (.h file)
@@ -16,10 +15,39 @@ node* insert(node* root, int key);
 node* search(node* x, int key);
 node* maximum(node* x);
 node* minimum(node* x);
+void printNode(node* root);
 
 
 int main(){
+    node* root = NULL;
+    root = insert(root, 50);
+    insert(root, 30);
+    insert(root, 20);
+    insert(root, 40);
+    insert(root, 70);
+    insert(root, 60);
+    insert(root, 80);
+
+    cout << "Binary Search Tree: ";
+    printNode(root);
+    cout << endl;
     
+    // test max and min
+    node* max = maximum(root);
+    node* min = minimum(root);
+    cout << "Maximum is ";
+    printNode(max);
+    cout << endl;
+    cout << "Minimum is ";
+    printNode(min);
+    cout << endl;
+
+    // test searching function
+    node* myfind = search(root, 40);
+    cout << "What I search is: ";
+    printNode(myfind);
+    cout << endl; 
+
     cout << "this is the last line!" << endl;
     return 0;
 }
@@ -79,3 +107,13 @@ node* minimum(node* x){
     }
     return x;
 }
+
+void printNode(node* root){
+    if(root == NULL){
+        return;
+    }
+    printNode(root->right);
+    cout << root->key << " ";
+    printNode(root->left);
+}
+
