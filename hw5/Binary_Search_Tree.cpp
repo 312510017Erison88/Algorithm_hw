@@ -15,7 +15,10 @@ node* insert(node* root, int key);
 node* search(node* x, int key);
 node* maximum(node* x);
 node* minimum(node* x);
+node* successor(node* x);
+node* predecessor(node* x);
 void printNode(node* root);
+void freeNode(node* root);
 
 
 int main(){
@@ -48,7 +51,19 @@ int main(){
     printNode(myfind);
     cout << endl; 
 
-    cout << "this is the last line!" << endl;
+    // test successor and predecessor
+    node* succ = successor(myfind);
+    cout << "40's successor is :";
+    printNode(succ);
+    cout << endl;
+
+    node* pre = predecessor(myfind);
+    cout << "40's predecessor is :";
+    printNode(pre);
+    cout << endl;
+
+    freeNode(root);
+
     return 0;
 }
 
@@ -77,7 +92,7 @@ node* insert(node* root, int key){
     else{
         node* rightChild = insert(root->right, key);
         root->right = rightChild;
-        rightChild = root;
+        rightChild->parent = root;
     }
     return root;
 }
@@ -108,6 +123,34 @@ node* minimum(node* x){
     return x;
 }
 
+node* successor(node* x){
+    if(x->right != NULL){
+        return successor(x->right);
+    }
+    else{
+        node* y = x->parent;
+        while(y != NULL && x == y->right){
+            x = y;
+            y = y->parent;
+        }
+        return y;
+    }
+}
+
+node* predecessor(node* x){
+    if(x->left != NULL){
+        return predecessor(x->left);
+    }
+    else{
+        node* y = x->parent;
+        while(y != NULL && x == y->left){
+            x = y;
+            y = y->parent;
+        }
+        return y;
+    }
+}
+
 void printNode(node* root){
     if(root == NULL){
         return;
@@ -115,5 +158,14 @@ void printNode(node* root){
     printNode(root->right);
     cout << root->key << " ";
     printNode(root->left);
+}
+
+void freeNode(node* root){
+    if(root == NULL){
+        return;
+    }
+    freeNode(root->left);
+    freeNode(root->right);
+    delete root;
 }
 
