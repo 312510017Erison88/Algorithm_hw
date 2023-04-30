@@ -17,8 +17,10 @@ node* maximum(node* x);
 node* minimum(node* x);
 node* successor(node* x);
 node* predecessor(node* x);
+void deleteTree(node* root);
+node* deleteNode(node* root, int key);
 void printNode(node* root);
-void freeNode(node* root);
+
 
 
 int main(){
@@ -62,7 +64,7 @@ int main(){
     printNode(pre);
     cout << endl;
 
-    freeNode(root);
+    deleteTree(root);
 
     return 0;
 }
@@ -151,6 +153,55 @@ node* predecessor(node* x){
     }
 }
 
+// delete the entire tree
+void deleteTree(node* root){
+    if (root == NULL){
+        return;
+    }
+    deleteTree(root->left);
+    deleteTree(root->right);
+    delete root;
+}
+
+//delete a node with given key
+node* deleteNode(node* root, int key){
+    if(root == NULL){
+        return root;
+    }
+    // find the node to be deleted
+    if(key < root->key){
+        root->left = deleteNode(root->left, key);
+    }
+    else if(key > root->key){
+        root->right = deleteNode(root->right, key);
+    }
+    else{
+        // case 1: node has no children
+        if(root->left == NULL && root->right == NULL){
+            delete root;
+            root = NULL;
+        }
+        // case 2: node has one child
+        else if(root->left == NULL){
+            node* temp = root;
+            root = root->right;
+            delete temp;
+        }
+        else if(root->right == NULL){
+            node* temp = root;
+            root = root->left;
+            delete temp;
+        }
+        // case 3: node has two children
+        else{
+            node* temp = minimum(root->right);
+            root->key = temp->key;
+            root->right = deleteNode(root->right, temp->key);
+        }
+    }
+    return root;
+}
+
 void printNode(node* root){
     if(root == NULL){
         return;
@@ -160,12 +211,5 @@ void printNode(node* root){
     printNode(root->left);
 }
 
-void freeNode(node* root){
-    if(root == NULL){
-        return;
-    }
-    freeNode(root->left);
-    freeNode(root->right);
-    delete root;
-}
+
 
