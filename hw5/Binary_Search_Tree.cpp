@@ -194,9 +194,9 @@ node* deleteNode(node* root, int key){
         }
         // case 3: node has two children
         else{
-            node* temp = minimum(root->right);
-            root->key = temp->key;
-            root->right = deleteNode(root->right, temp->key);
+            node* temp = minimum(root->right);  // 找到右子樹中的最小節點
+            root->key = temp->key;              // 將最小節點的值複製到要被刪除的節點
+            root->right = deleteNode(root->right, temp->key);       // 刪除最小節點
         }
     }
     return root;
