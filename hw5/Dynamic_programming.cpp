@@ -5,14 +5,17 @@ using namespace std;
 int Cut_Rod(int* price, int n);
 int Memorized_Cut_Rod(int* price, int n);
 int Memorized_Cut_Rod_Aux(int* price, int n, int* table);
+int Bottom_up_Cut_Rod(int* price, int n);
 // goal: write the top-down and bottom-up method to get max and min price as well as the way you cut
 int main(){
     int price[] = {1,5,8,9,10,17,17,20,24,30};
 
     int maxprice = Cut_Rod(price, 4);
     int maxprice_2 = Memorized_Cut_Rod(price, 4);
+    int maxprice_3 = Bottom_up_Cut_Rod(price, 4);
     cout << maxprice << endl;
     cout << maxprice_2 << endl;
+    cout << maxprice_3 << endl;
     
     return 0;
 }
@@ -53,4 +56,19 @@ int Memorized_Cut_Rod_Aux(int* price, int n, int* table){
         table[n] = q;
         return q;
     }
+}
+
+int Bottom_up_Cut_Rod(int* price, int n){
+    int* table = new int[n+1];
+    table[0] = 0;
+    for(int i=1; i<=n; i++){
+        int temp = -100000;
+        for(int j=0; j<i; j++){
+            temp = max(temp, price[j] + table[i-j-1]);
+        }
+        table[i] = temp;
+    }
+    int maxPrice = table[n];
+    delete[] table;
+    return maxPrice;
 }
