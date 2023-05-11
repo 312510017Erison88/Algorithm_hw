@@ -19,11 +19,12 @@ Bottom_up Bottom_up_Cut_Rod(int* price, int n);
 int main(){
     int price[] = {1,5,8,9,10,17,17,20,24,30};
 
-    int maxprice = Cut_Rod(price, 8);
-    int maxprice_2 = Memorized_Cut_Rod(price, 8);
-    Bottom_up price_3 = Bottom_up_Cut_Rod(price, 8);
+    int maxprice = Cut_Rod(price, 4);
+    int maxprice_2 = Memorized_Cut_Rod(price, 4);
+    Bottom_up price_3 = Bottom_up_Cut_Rod(price, 4);
     cout << maxprice << endl;
     cout << maxprice_2 << endl;
+    //////////////////////////////////////////////////
     cout << "total length: " << "4" << endl;
     cout << "maximum price: " << price_3.max_price << endl;
     cout << "切法: ";
@@ -110,7 +111,7 @@ Bottom_up Bottom_up_Cut_Rod(int* price, int n){
             }
         }
         max_table[i] = max_price;
-        min_table[i] = min_price; // wierd for this line!!!!!!!!
+        min_table[i] = min_price; 
         max_cut_position.push_back(max_cutIndex+1);
         min_cut_position.push_back(min_cutIndex+1);
     }
@@ -119,6 +120,33 @@ Bottom_up Bottom_up_Cut_Rod(int* price, int n){
     box.min_price = min_table[n];
     box.max_cut_posi = max_cut_position;
     box.min_cut_posi = min_cut_position;
+    //////////////////////////
+    cout << "Bottom Up:" << endl;
+    cout << "total length: " << n <<endl;
+    cout << "maximum price: " << max_table[n] << endl;
+    cout << "切法: ";
+    int length = n;
+    int count = 0;
+    while(length > 0){
+        cout << max_cut_position[length -1] << " ";
+        length -= max_cut_position[length-1];
+        count ++;
+    }
+    cout << endl;
+    cout << "number of pieces:" << count << endl;
+
+    cout << "minimum price: " << min_table[n] << endl;
+    cout << "切法: ";
+    length = n;
+    count = 0;
+    while (length > 0) {
+        cout << min_cut_position[length - 1] << " ";
+        length -= min_cut_position[length - 1];
+        count++;
+    }
+    cout << endl;
+    cout << "number of pieces: " << count << endl;
+    //////////////////////////////
     delete[] max_table;
     delete[] min_table;
 
