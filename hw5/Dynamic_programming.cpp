@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#define LIMIT 10
 
 using namespace std;
 
@@ -21,18 +22,15 @@ int main(){
 
     int maxprice = Cut_Rod(price, 4);
     int maxprice_2 = Memorized_Cut_Rod(price, 4);
-    Bottom_up price_3 = Bottom_up_Cut_Rod(price, 4);
+    Bottom_up price_3 = Bottom_up_Cut_Rod(price, 12);
     cout << maxprice << endl;
     cout << maxprice_2 << endl;
     //////////////////////////////////////////////////
-    cout << "total length: " << "4" << endl;
     cout << "maximum price: " << price_3.max_price << endl;
     cout << "切法: ";
     for (int i = 0; i < price_3.max_cut_posi.size(); i++){
         cout << price_3.max_cut_posi[i] << " ";
     }
-    cout << endl;
-    cout << "number of pieces: " << price_3.max_cut_posi.size() << endl;
     cout << endl;
     //////////////////////////////////////////////////////
     cout << "minimum price: " << price_3.min_price << endl;
@@ -41,7 +39,6 @@ int main(){
         cout << price_3.min_cut_posi[i] << " ";
     }
     cout << endl;
-    cout << "number of pieces: " << price_3.min_cut_posi.size() << endl;
     
     return 0;
 }
@@ -98,18 +95,35 @@ Bottom_up Bottom_up_Cut_Rod(int* price, int n){
         int min_price = 100000;
         int max_cutIndex = 0;
         int min_cutIndex = 0;
-        for(int j=0; j<i; j++){
-            int max_current_price = price[j] + max_table[i-j-1];
-            int min_current_price = price[j] + min_table[i-j-1];
-            if(max_current_price > max_price){
-                max_price = max_current_price;
-                max_cutIndex = j;
-            }
-            if(min_current_price < min_price){
-                min_price = min_current_price;
-                min_cutIndex = j;
+        if(i > LIMIT){
+            for(int j=0; j<LIMIT; j++){
+                int max_current_price = price[j] + max_table[i-j-1];
+                int min_current_price = price[j] + min_table[i-j-1];
+                if(max_current_price > max_price){
+                    max_price = max_current_price;
+                    max_cutIndex = j;
+                }
+                if(min_current_price < min_price){
+                    min_price = min_current_price;
+                    min_cutIndex = j;
+                }
             }
         }
+        else{
+            for(int j=0; j<i; j++){
+                int max_current_price = price[j] + max_table[i-j-1];
+                int min_current_price = price[j] + min_table[i-j-1];
+                if(max_current_price > max_price){
+                    max_price = max_current_price;
+                    max_cutIndex = j;
+                }
+                if(min_current_price < min_price){
+                    min_price = min_current_price;
+                    min_cutIndex = j;
+                }
+            }
+        }
+        
         max_table[i] = max_price;
         min_table[i] = min_price; 
         max_cut_position.push_back(max_cutIndex+1);
