@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#define LIMIT 10
+//#define LIMIT 10
 
 using namespace std;
 
@@ -12,36 +12,32 @@ struct Bottom_up{
 };
 
 int Cut_Rod(int* price, int n);
-int Top_down_Cut_Rod(int* price, int n);
-int Top_down_max_Aux(int* price, int n, int* max_table, vector<int>& max_cut_position);
-int Top_down_min_Aux(int* price, int n, int* min_table, vector<int>& min_cut_position);
-
-Bottom_up Bottom_up_Cut_Rod(int* price, int n);
+void Top_down_Cut_Rod(int* price, int n, int rod_size);
+int Top_down_max_Aux(int* price, int n, int* max_table, vector<int>& max_cut_position, int rod_size);
+int Top_down_min_Aux(int* price, int n, int* min_table, vector<int>& min_cut_position, int rod_size);
+Bottom_up Bottom_up_Cut_Rod(int* price, int n, int rod_size);
 
 // goal: write the top-down and bottom-up method to get max and min price as well as the way you cut
 int main(){
+    /*
     int price[] = {1,5,8,9,10,17,17,20,24,30};
 
     int maxprice = Cut_Rod(price, 4);
-    int maxprice_2 = Top_down_Cut_Rod(price, 9);
+    Top_down_Cut_Rod(price, 9);
     Bottom_up price_3 = Bottom_up_Cut_Rod(price, 9);
-    cout << maxprice << endl;
-    cout << maxprice_2 << endl;
-    /*
-    cout << "maximum price: " << price_3.max_price << endl;
-    cout << "切法: ";
-    for (int i = 0; i < price_3.max_cut_posi.size(); i++){
-        cout << price_3.max_cut_posi[i] << " ";
-    }
-    cout << endl;
-    //////////////////////////////////////////////////////
-    cout << "minimum price: " << price_3.min_price << endl;
-    cout << "切法: ";
-    for (int i = 0; i < price_3.min_cut_posi.size(); i++){
-        cout << price_3.min_cut_posi[i] << " ";
-    }
-    cout << endl;
     */
+    int rod_size;
+    cout << "Please input the length of the rod: "; 
+    cin >> rod_size;
+    int* price = new int[rod_size];
+    cout << "Please input the price of each segment of the subrod orderly: " << endl; 
+    for(int i=0; i<rod_size; i++){
+        cin >> price[i];
+    }
+    Top_down_Cut_Rod(price, 9, rod_size);
+    Bottom_up bottom_up_price = Bottom_up_Cut_Rod(price, 9, rod_size);
+
+    delete[] price;
     
     return 0;
 }
@@ -59,7 +55,7 @@ int Cut_Rod(int* price, int n){
     return q;
 }
 
-int Top_down_Cut_Rod(int* price, int n){
+void Top_down_Cut_Rod(int* price, int n, int rod_size){
     int* max_table = new int[n+1];
     int* min_table = new int[n+1];
     vector<int> max_cut_position;
@@ -73,8 +69,8 @@ int Top_down_Cut_Rod(int* price, int n){
         min_table[i] = -100;         // INT_MAX
     }
 
-    int max_price = Top_down_max_Aux(price, n, max_table, max_cut_position);
-    int min_price = Top_down_min_Aux(price, n, min_table, min_cut_position);
+    int max_price = Top_down_max_Aux(price, n, max_table, max_cut_position, rod_size);
+    int min_price = Top_down_min_Aux(price, n, min_table, min_cut_position, rod_size);
 
     // To print the information for output
     cout << "Top Down: " << endl;
@@ -90,6 +86,7 @@ int Top_down_Cut_Rod(int* price, int n){
     }
     cout << endl;
     cout << "Number of Pieces: " << count << endl;
+    cout << endl;
     
     cout << "Minimum Price: " << min_price << endl;
     cout << "Cut Position: ";
@@ -103,14 +100,13 @@ int Top_down_Cut_Rod(int* price, int n){
     }
     cout << endl;
     cout << "Number of Pieces: " << count << endl;
+    cout << endl;
 
     delete[] max_table;
     delete[] min_table;
-
-    return max_price;
 }
 
-int Top_down_max_Aux(int* price, int n, int* max_table, vector<int>& max_cut_position){
+int Top_down_max_Aux(int* price, int n, int* max_table, vector<int>& max_cut_position, int rod_size){
     if(max_table[n] >= 0){
         return max_table[n];
     }
@@ -118,10 +114,10 @@ int Top_down_max_Aux(int* price, int n, int* max_table, vector<int>& max_cut_pos
         int max_price = -100000;
         int max_cutIndex = 0;
 
-        if(n>LIMIT){
+        if(n>rod_size){
             // Try all possible cuts and find the maximum and minimum prices
-            for(int i=0; i<LIMIT; i++){
-                int current_max_price = price[i] + Top_down_max_Aux(price, n-i-1, max_table, max_cut_position);
+            for(int i=0; i<rod_size; i++){
+                int current_max_price = price[i] + Top_down_max_Aux(price, n-i-1, max_table, max_cut_position, rod_size);
                 if (current_max_price > max_price) {
                     max_price = current_max_price;
                     max_cutIndex = i+1;
@@ -131,7 +127,7 @@ int Top_down_max_Aux(int* price, int n, int* max_table, vector<int>& max_cut_pos
         else{
             // Try all possible cuts and find the maximum and minimum prices
             for(int i=0; i<n; i++){
-                int current_max_price = price[i] + Top_down_max_Aux(price, n-i-1, max_table, max_cut_position);
+                int current_max_price = price[i] + Top_down_max_Aux(price, n-i-1, max_table, max_cut_position, rod_size);
                 if(current_max_price > max_price){
                     max_price = current_max_price;
                     max_cutIndex = i+1;
@@ -147,7 +143,7 @@ int Top_down_max_Aux(int* price, int n, int* max_table, vector<int>& max_cut_pos
     }
 }
 
-int Top_down_min_Aux(int* price, int n, int* min_table, vector<int>& min_cut_position){
+int Top_down_min_Aux(int* price, int n, int* min_table, vector<int>& min_cut_position, int rod_size){
     if(min_table[n] >= 0){
         return min_table[n];
     }
@@ -155,10 +151,10 @@ int Top_down_min_Aux(int* price, int n, int* min_table, vector<int>& min_cut_pos
         int min_price = 100000;
         int min_cutIndex = 0;
 
-        if(n>LIMIT){
+        if(n>rod_size){
             // Try all possible cuts and find the maximum and minimum prices
-            for(int i=0; i<LIMIT; i++){
-                int current_min_price = price[i] + Top_down_min_Aux(price, n-i-1, min_table, min_cut_position);
+            for(int i=0; i<rod_size; i++){
+                int current_min_price = price[i] + Top_down_min_Aux(price, n-i-1, min_table, min_cut_position, rod_size);
                 if(current_min_price < min_price){
                     min_price = current_min_price;
                     min_cutIndex = i+1;
@@ -168,7 +164,7 @@ int Top_down_min_Aux(int* price, int n, int* min_table, vector<int>& min_cut_pos
         else{
             // Try all possible cuts and find the maximum and minimum prices
             for(int i=0; i<n; i++){
-                int current_min_price = price[i] + Top_down_min_Aux(price, n-i-1, min_table, min_cut_position);
+                int current_min_price = price[i] + Top_down_min_Aux(price, n-i-1, min_table, min_cut_position, rod_size);
                 if(current_min_price < min_price){
                     min_price = current_min_price;
                     min_cutIndex = i+1;
@@ -184,7 +180,7 @@ int Top_down_min_Aux(int* price, int n, int* min_table, vector<int>& min_cut_pos
     }
 }
 
-Bottom_up Bottom_up_Cut_Rod(int* price, int n){
+Bottom_up Bottom_up_Cut_Rod(int* price, int n, int rod_size){
     Bottom_up box;
     int* max_table = new int[n+1];
     int* min_table = new int[n+1];
@@ -198,8 +194,8 @@ Bottom_up Bottom_up_Cut_Rod(int* price, int n){
         int min_price = 100000;         // INT_MAX
         int max_cutIndex = 0;
         int min_cutIndex = 0;
-        if(i > LIMIT){                  // if i > number element of the table 
-            for(int j=0; j<LIMIT; j++){
+        if(i > rod_size){                  // if i > number element of the table 
+            for(int j=0; j<rod_size; j++){
                 int max_current_price = price[j] + max_table[i-j-1];
                 int min_current_price = price[j] + min_table[i-j-1];
                 if(max_current_price > max_price){
@@ -241,7 +237,7 @@ Bottom_up Bottom_up_Cut_Rod(int* price, int n){
     cout << "Bottom Up:" << endl;
     cout << "total length: " << n <<endl;
     cout << "maximum price: " << max_table[n] << endl;
-    cout << "切法: ";
+    cout << "Cut Position: ";
     int length = n;
     int count = 0;
     while(length > 0){
@@ -251,9 +247,10 @@ Bottom_up Bottom_up_Cut_Rod(int* price, int n){
     }
     cout << endl;
     cout << "number of pieces:" << count << endl;
+    cout << endl;
 
     cout << "minimum price: " << min_table[n] << endl;
-    cout << "切法: ";
+    cout << "Cut Position: ";
     length = n;
     count = 0;
     while (length > 0) {
