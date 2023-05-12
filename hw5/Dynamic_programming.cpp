@@ -91,11 +91,11 @@ Bottom_up Bottom_up_Cut_Rod(int* price, int n){
     min_table[0] = 0;
 
     for(int i=1; i<=n; i++){            // record the table
-        int max_price = -100000;
-        int min_price = 100000;
+        int max_price = -100000;        // INT_MIN
+        int min_price = 100000;         // INT_MAX
         int max_cutIndex = 0;
         int min_cutIndex = 0;
-        if(i > LIMIT){
+        if(i > LIMIT){                  // if i > number element of the table 
             for(int j=0; j<LIMIT; j++){
                 int max_current_price = price[j] + max_table[i-j-1];
                 int min_current_price = price[j] + min_table[i-j-1];
@@ -109,7 +109,7 @@ Bottom_up Bottom_up_Cut_Rod(int* price, int n){
                 }
             }
         }
-        else{
+        else{                           // if i < number element of the table
             for(int j=0; j<i; j++){
                 int max_current_price = price[j] + max_table[i-j-1];
                 int min_current_price = price[j] + min_table[i-j-1];
@@ -123,7 +123,6 @@ Bottom_up Bottom_up_Cut_Rod(int* price, int n){
                 }
             }
         }
-        
         max_table[i] = max_price;
         min_table[i] = min_price; 
         max_cut_position.push_back(max_cutIndex+1);
@@ -134,7 +133,8 @@ Bottom_up Bottom_up_Cut_Rod(int* price, int n){
     box.min_price = min_table[n];
     box.max_cut_posi = max_cut_position;
     box.min_cut_posi = min_cut_position;
-    //////////////////////////
+
+    // To print the information for output
     cout << "Bottom Up:" << endl;
     cout << "total length: " << n <<endl;
     cout << "maximum price: " << max_table[n] << endl;
@@ -160,7 +160,7 @@ Bottom_up Bottom_up_Cut_Rod(int* price, int n){
     }
     cout << endl;
     cout << "number of pieces: " << count << endl;
-    //////////////////////////////
+    
     delete[] max_table;
     delete[] min_table;
 
