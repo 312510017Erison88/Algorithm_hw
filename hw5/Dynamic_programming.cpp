@@ -69,8 +69,8 @@ int Top_down_Cut_Rod(int* price, int n){
 
     // Initialize max_table with negative infinity and min_table with positive infinity
     for(int i=1; i<=n; i++){
-        max_table[i] = -100000;         // INT_MIN
-        min_table[i] = 100000;         // INT_MAX
+        max_table[i] = -100;         // INT_MIN
+        min_table[i] = -100;         // INT_MAX
     }
 
     int max_price = Top_down_max_Aux(price, n, max_table, max_cut_position);
@@ -124,17 +124,17 @@ int Top_down_max_Aux(int* price, int n, int* max_table, vector<int>& max_cut_pos
                 int current_max_price = price[i] + Top_down_max_Aux(price, n-i-1, max_table, max_cut_position);
                 if (current_max_price > max_price) {
                     max_price = current_max_price;
-                    max_cutIndex = i + 1;
+                    max_cutIndex = i+1;
                 }
             }
         }
         else{
             // Try all possible cuts and find the maximum and minimum prices
             for(int i=0; i<n; i++){
-                int current_max_price = price[i] + Top_down_max_Aux(price, n - i - 1, max_table, max_cut_position);
+                int current_max_price = price[i] + Top_down_max_Aux(price, n-i-1, max_table, max_cut_position);
                 if(current_max_price > max_price){
                     max_price = current_max_price;
-                    max_cutIndex = i + 1;
+                    max_cutIndex = i+1;
                 }
             }
         }
@@ -161,7 +161,7 @@ int Top_down_min_Aux(int* price, int n, int* min_table, vector<int>& min_cut_pos
                 int current_min_price = price[i] + Top_down_min_Aux(price, n-i-1, min_table, min_cut_position);
                 if(current_min_price < min_price){
                     min_price = current_min_price;
-                    min_cutIndex = i + 1;
+                    min_cutIndex = i+1;
                 }
             }
         }
