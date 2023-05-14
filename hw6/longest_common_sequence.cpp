@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
@@ -21,6 +20,7 @@ int main(){
 
     longest_common_seq(X, Y, length, direction, size_X, size_Y);
 
+    // Free the dynamically allocated memory
     for(int i=0; i < size_X+1; i++){
         delete[] length[i];
         delete[] direction[i];
@@ -31,6 +31,7 @@ int main(){
     return 0;
 }
 
+// Compute the longest common subsequence
 void longest_common_seq(double* X, double* Y, int** length, int** direction, int size_X, int size_Y){
     // Initialize the length and direction arrays
     for(int i=0; i<size_X+1; i++){
@@ -45,15 +46,15 @@ void longest_common_seq(double* X, double* Y, int** length, int** direction, int
         for(int j=1; j<size_Y+1; j++){
             if(X[i-1] == Y[j-1]){
                 length[i][j] = length[i-1][j-1] + 1;
-                direction[i][j] = 0;  // "up-left arrow"
+                direction[i][j] = 0;  // Store as "up-left arrow"
             }
             else if(length[i-1][j] >= length[i][j-1]){
                 length[i][j] = length[i-1][j];
-                direction[i][j] = 1;  // "up arrow"
+                direction[i][j] = 1;  // Store as "up arrow"
             }
             else{
                 length[i][j] = length[i][j-1];
-                direction[i][j] = 2;  // "left arrow"
+                direction[i][j] = 2;  // Store as "left arrow"
             }
         }
     }
@@ -61,6 +62,7 @@ void longest_common_seq(double* X, double* Y, int** length, int** direction, int
     cout << endl;
 }
 
+// Print the result
 void print_LCS(double* X, int** length, int** direction, int i, int j){
     if(i == 0 || j == 0){
         return;
