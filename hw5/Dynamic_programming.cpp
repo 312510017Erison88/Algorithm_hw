@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-//#define LIMIT 10
+#define ROD_SIZE 4
 
 using namespace std;
 
@@ -34,8 +34,8 @@ int main(){
     for(int i=0; i<rod_size; i++){
         cin >> price[i];
     }
-    Top_down_Cut_Rod(price, 9, rod_size);
-    Bottom_up bottom_up_price = Bottom_up_Cut_Rod(price, 9, rod_size);
+    Top_down_Cut_Rod(price, ROD_SIZE, rod_size);
+    Bottom_up bottom_up_price = Bottom_up_Cut_Rod(price, ROD_SIZE, rod_size);
 
     delete[] price;
     
