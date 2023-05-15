@@ -27,18 +27,29 @@ int main(){
         direction_2[i] = new int[size_Z + 1];
     }
 
-    double* result1 = new double[size_Y];       //wierd!!!!!!!!!
-    double* result2 = new double[size_Y];
-    double* final_result = new double[size_X];
-
     longest_common_seq(X, Y, length, direction, size_X, size_Y);
+    int lcs_length = length[size_X][size_Y];
+    double* result1 = new double[lcs_length];
     print_LCS(X, length, direction, size_X, size_Y, result1);
     cout << endl;
+
     longest_common_seq(X, Z, length_2, direction_2, size_X, size_Z);
+    int lcs_length2 = length[size_X][size_Z];
+    double* result2 = new double[lcs_length2];
     print_LCS(X, length_2, direction_2, size_X, size_Z, result2);
     cout << endl;
-    longest_common_seq(result1, result2, length_2, direction_2, size_X, size_Z);
-    print_LCS(result1, length_2, direction_2, size_X, size_Y, final_result);
+
+    int** length_3 = new int*[lcs_length + 1];
+    int** direction_3 = new int*[lcs_length + 1];
+    for(int i = 0; i < lcs_length + 1; i++){
+        length_3[i] = new int[lcs_length2 + 1];
+        direction_3[i] = new int[lcs_length2 + 1];
+    }
+
+    longest_common_seq(result1, result2, length_3, direction_3, lcs_length, lcs_length2);
+    int final_length = length_3[lcs_length][lcs_length2];
+    double* final_result = new double[final_length];
+    print_LCS(result1, length_3, direction_3, lcs_length, lcs_length2, final_result);
     cout << endl;
 
     // Free the dynamically allocated memory
@@ -57,6 +68,13 @@ int main(){
     delete[] direction_2;
     delete[] result1;
     delete[] result2;
+
+    for(int i = 0; i < lcs_length + 1; i++){
+        delete[] length_3[i];
+        delete[] direction_3[i];
+    }
+    delete[] length_3;
+    delete[] direction_3;
     delete[] final_result;
 
     return 0;
@@ -101,7 +119,7 @@ void print_LCS(double* X, int** length, int** direction, int i, int j, double* r
     if(direction[i][j] == 0){
         print_LCS(X, length, direction, i-1, j-1, result);
         cout << X[i-1] << " ";
-        result[i-1] = X[i-1];   //wierd!
+        result[length[i][j]-1] = X[i-1];   //wierd!
     }
     else if(direction[i][j] == 1){
         print_LCS(X, length, direction, i-1, j, result);
