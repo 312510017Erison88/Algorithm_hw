@@ -141,11 +141,20 @@ int main(int argc, char** argv){
     longest_common_seq(result1, result2, length_3, direction_3, lcs_length, lcs_length2);
     int final_length = length_3[lcs_length][lcs_length2];
     double* final_result = new double[final_length];
-    cout << "The LCS of X and Y and Z sequence is: ";
+    cout << "The LCS of W(X and Y and Z) sequence is: ";
     print_LCS(result1, length_3, direction_3, lcs_length, lcs_length2, final_result);
     cout << endl;
     cout << "The length of LCS of XYZ is: " << final_length << endl;
     
+    // output file
+    ofstream output_file;
+    output_file.open(argv[2], ios::out);
+    output_file << "The LCS of W(X and Y and Z) sequence is: ";
+    print_LCS(result1, length_3, direction_3, lcs_length, lcs_length2, final_result);
+    output_file << endl;
+    output_file << "The length of LCS of XYZ is: " << final_length << endl;
+
+
     // Free the dynamically allocated memory
     delete[] X;
     delete[] Y;
