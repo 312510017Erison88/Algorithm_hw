@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <vector>
 
 using namespace std;
 
@@ -28,6 +29,9 @@ int main(int argc, char** argv){
 	}
 
     // read and store the data
+    vector<double> X_vector;
+    vector<double> Y_vector;
+    vector<double> Z_vector;
     double* X;
     int size_X = 0;
     double* Y;
@@ -42,34 +46,58 @@ int main(int argc, char** argv){
     istringstream iss1(first_line);
     double temp;
     while(iss1 >> temp){
+        X_vector.push_back(temp);
         size_X++;
     }
     X = new double[size_X]; // 分配内存空间
+    for(int i=0; i<size_X; i++){
+        X[i] = X_vector[i];
+    }
+    // print for X sequence
+    cout << "The input X sequence is: ";
+    for(int i=0; i<size_X; i++){
+        cout << X[i] << " ";
+    }
+    cout << endl;
 
     getline(input_file, second_line);
     istringstream iss2(second_line);
     double temp2;
     while(iss2 >> temp2){
+        Y_vector.push_back(temp2);
         size_Y++;
     }
-
     Y = new double[size_Y]; // 分配内存空间
-
+    for(int i=0; i<size_Y; i++){
+        Y[i] = Y_vector[i];
+    }
+    // print for Y sequence
+    cout << "The input Y sequence is: ";
+    for(int i=0; i<size_Y; i++){
+        cout << Y[i] << " ";
+    }
+    cout << endl;
+    
     getline(input_file, third_line);
     istringstream iss3(third_line);
     double temp3;
     while(iss3 >> temp3){
+        Z_vector.push_back(temp3);
         size_Z++;
     }
     Z = new double[size_Z]; // 分配内存空间
-    
-    cout << size_X << endl;
-    cout << size_Y << endl;
-    cout << size_Z << endl;
+    for(int i=0; i<size_Z; i++){
+        Z[i] = Z_vector[i];
+    }
+    // print for Z sequence
+    cout << "The input Z sequence is: ";
+    for(int i=0; i<size_Z; i++){
+        cout << Z[i] << " ";
+    }
+    cout << endl;
 
     input_file.close();
 
-    
     // Create 2D arrays for length and direction
     int** length = new int*[size_X + 1];
     int** direction = new int*[size_X + 1];
@@ -89,6 +117,7 @@ int main(int argc, char** argv){
     longest_common_seq(X, Y, length, direction, size_X, size_Y);
     int lcs_length = length[size_X][size_Y];
     double* result1 = new double[lcs_length];
+    cout << "The LCS of X and Y sequence is: ";
     print_LCS(X, length, direction, size_X, size_Y, result1);
     cout << endl;
 
@@ -96,6 +125,7 @@ int main(int argc, char** argv){
     longest_common_seq(X, Z, length_2, direction_2, size_X, size_Z);
     int lcs_length2 = length[size_X][size_Z];
     double* result2 = new double[lcs_length2];
+    cout << "The LCS of X and Z sequence is: ";
     print_LCS(X, length_2, direction_2, size_X, size_Z, result2);
     cout << endl;
 
@@ -111,10 +141,15 @@ int main(int argc, char** argv){
     longest_common_seq(result1, result2, length_3, direction_3, lcs_length, lcs_length2);
     int final_length = length_3[lcs_length][lcs_length2];
     double* final_result = new double[final_length];
+    cout << "The LCS of X and Y and Z sequence is: ";
     print_LCS(result1, length_3, direction_3, lcs_length, lcs_length2, final_result);
     cout << endl;
-
+    cout << "The length of LCS of XYZ is: " << final_length << endl;
+    
     // Free the dynamically allocated memory
+    delete[] X;
+    delete[] Y;
+    delete[] Z;
     for(int i=0; i < size_X+1; i++){
         delete[] length[i];
         delete[] direction[i];
@@ -151,7 +186,6 @@ void longest_common_seq(double* X, double* Y, int** length, int** direction, int
     for(int i=0; i<size_Y+1; i++){
         length[0][i] = 0;
     }
-
     // Compute the LCS table
     for(int i=1; i<size_X+1; i++){
         for(int j=1; j<size_Y+1; j++){
