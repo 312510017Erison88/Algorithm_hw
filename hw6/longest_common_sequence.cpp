@@ -6,7 +6,7 @@
 using namespace std;
 
 void longest_common_seq(double* X, double* Y, int** length, int** direction, int size_X, int size_Y);
-void print_LCS(double* X, int** length, int** direction, int i, int j, double* result);
+void print_LCS(double* X, int** length, int** direction, int i, int j, double* result, ofstream& output_file);
 
 int main(int argc, char** argv){
     /*
@@ -19,14 +19,18 @@ int main(int argc, char** argv){
     */
     // declare a file name variable
     ifstream input_file;
+    ofstream output_file;
 
-    // open the file
+    // open the input file
     input_file.open(argv[1], ios::in);
     cout << input_file.is_open() << endl;
     if(input_file.fail()){
 		cout << "Input file is failed." << endl;
         return 1;
 	}
+
+    // open output file
+    output_file.open(argv[2], ios::out);
 
     // read and store the data
     vector<double> X_vector;
@@ -49,7 +53,7 @@ int main(int argc, char** argv){
         X_vector.push_back(temp);
         size_X++;
     }
-    X = new double[size_X]; // 分配内存空间
+    X = new double[size_X]; // The space to store X
     for(int i=0; i<size_X; i++){
         X[i] = X_vector[i];
     }
@@ -67,7 +71,7 @@ int main(int argc, char** argv){
         Y_vector.push_back(temp2);
         size_Y++;
     }
-    Y = new double[size_Y]; // 分配内存空间
+    Y = new double[size_Y]; // The space to store Y
     for(int i=0; i<size_Y; i++){
         Y[i] = Y_vector[i];
     }
@@ -85,7 +89,7 @@ int main(int argc, char** argv){
         Z_vector.push_back(temp3);
         size_Z++;
     }
-    Z = new double[size_Z]; // 分配内存空间
+    Z = new double[size_Z]; // The space to store Z
     for(int i=0; i<size_Z; i++){
         Z[i] = Z_vector[i];
     }
@@ -118,16 +122,20 @@ int main(int argc, char** argv){
     int lcs_length = length[size_X][size_Y];
     double* result1 = new double[lcs_length];
     cout << "The LCS of X and Y sequence is: ";
-    print_LCS(X, length, direction, size_X, size_Y, result1);
+    output_file << "The LCS of X and Y sequence is: ";
+    print_LCS(X, length, direction, size_X, size_Y, result1, output_file);
     cout << endl;
+    output_file << endl;
 
     // Compute LCS for X and Z
     longest_common_seq(X, Z, length_2, direction_2, size_X, size_Z);
     int lcs_length2 = length[size_X][size_Z];
     double* result2 = new double[lcs_length2];
     cout << "The LCS of X and Z sequence is: ";
-    print_LCS(X, length_2, direction_2, size_X, size_Z, result2);
+    output_file << "The LCS of X and Z sequence is: ";
+    print_LCS(X, length_2, direction_2, size_X, size_Z, result2, output_file);
     cout << endl;
+    output_file << endl;
 
     // Create 2D arrays for the final LCS computation
     int** length_3 = new int*[lcs_length + 1];
@@ -142,18 +150,12 @@ int main(int argc, char** argv){
     int final_length = length_3[lcs_length][lcs_length2];
     double* final_result = new double[final_length];
     cout << "The LCS of W(X and Y and Z) sequence is: ";
-    print_LCS(result1, length_3, direction_3, lcs_length, lcs_length2, final_result);
-    cout << endl;
-    cout << "The length of LCS of XYZ is: " << final_length << endl;
-    
-    // output file
-    ofstream output_file;
-    output_file.open(argv[2], ios::out);
     output_file << "The LCS of W(X and Y and Z) sequence is: ";
-    print_LCS(result1, length_3, direction_3, lcs_length, lcs_length2, final_result);
+    print_LCS(result1, length_3, direction_3, lcs_length, lcs_length2, final_result, output_file);
+    cout << endl;
     output_file << endl;
+    cout << "The length of LCS of XYZ is: " << final_length << endl;
     output_file << "The length of LCS of XYZ is: " << final_length << endl;
-
 
     // Free the dynamically allocated memory
     delete[] X;
@@ -215,19 +217,20 @@ void longest_common_seq(double* X, double* Y, int** length, int** direction, int
 }
 
 // Print the result
-void print_LCS(double* X, int** length, int** direction, int i, int j, double* result){
+void print_LCS(double* X, int** length, int** direction, int i, int j, double* result, ofstream& output_file){
     if(i == 0 || j == 0){
         return;
     }
     if(direction[i][j] == 0){
-        print_LCS(X, length, direction, i-1, j-1, result);
+        print_LCS(X, length, direction, i-1, j-1, result, output_file);
         cout << X[i-1] << " ";
+        output_file << X[i-1] << " ";
         result[length[i][j]-1] = X[i-1]; 
     }
     else if(direction[i][j] == 1){
-        print_LCS(X, length, direction, i-1, j, result);
+        print_LCS(X, length, direction, i-1, j, result, output_file);
     }
     else{
-        print_LCS(X, length, direction, i, j-1, result);
+        print_LCS(X, length, direction, i, j-1, result, output_file);
     }
 }
