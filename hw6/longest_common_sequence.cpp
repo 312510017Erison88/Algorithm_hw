@@ -1,18 +1,75 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
 void longest_common_seq(double* X, double* Y, int** length, int** direction, int size_X, int size_Y);
 void print_LCS(double* X, int** length, int** direction, int i, int j, double* result);
 
-int main(){
+int main(int argc, char** argv){
+    /*
     double X[] = {1.0, 4.0, 6.0, 2.0, 8.0, 1.0, 5.0, 6.0};
     double Y[] = {2.0, 6.0, 9.0, 8.0, 5.0, 1.0, 6, 3, 2};
     double Z[] = {1, 5, 6, 8, 1, 22, 3};
     int size_X = sizeof(X) / sizeof(X[0]);
     int size_Y = sizeof(Y) / sizeof(Y[0]);
     int size_Z = sizeof(Z) / sizeof(Z[0]);
+    */
+    // declare a file name variable
+    ifstream input_file;
 
+    // open the file
+    input_file.open(argv[1], ios::in);
+    cout << input_file.is_open() << endl;
+    if(input_file.fail()){
+		cout << "Input file is failed." << endl;
+        return 1;
+	}
+
+    // read and store the data
+    double* X;
+    int size_X = 0;
+    double* Y;
+    int size_Y = 0;
+    double* Z;
+    int size_Z = 0;
+
+    string first_line;
+    string second_line;
+    string third_line;
+    getline(input_file, first_line);
+    istringstream iss1(first_line);
+    double temp;
+    while(iss1 >> temp){
+        size_X++;
+    }
+    X = new double[size_X]; // 分配内存空间
+
+    getline(input_file, second_line);
+    istringstream iss2(second_line);
+    double temp2;
+    while(iss2 >> temp2){
+        size_Y++;
+    }
+
+    Y = new double[size_Y]; // 分配内存空间
+
+    getline(input_file, third_line);
+    istringstream iss3(third_line);
+    double temp3;
+    while(iss3 >> temp3){
+        size_Z++;
+    }
+    Z = new double[size_Z]; // 分配内存空间
+    
+    cout << size_X << endl;
+    cout << size_Y << endl;
+    cout << size_Z << endl;
+
+    input_file.close();
+
+    
     // Create 2D arrays for length and direction
     int** length = new int*[size_X + 1];
     int** direction = new int*[size_X + 1];
