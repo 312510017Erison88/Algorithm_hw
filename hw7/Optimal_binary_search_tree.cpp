@@ -11,19 +11,18 @@ int main(){
     int numKeys = sizeof(probabilities) / sizeof(probabilities[0]) - 1;  // number of keys
 
     OptimalBST(probabilities, dummyKeys, numKeys);
-    
-    cout << "hi!" << endl;
+
     return 0;
 }
 
 
 void OptimalBST(int probabilities[], int dummyKeys[], int numKeys){
-    int expectedCost[numKeys+2][numKeys+1];  // expected cost table
+    int expectedCost[numKeys+2][numKeys+1];  // expected cost table,    now numKeys is 4
     int cumulativeProbability[numKeys+2][numKeys+1];  // cumulative probability table
     int root[numKeys+1][numKeys+1];  // root table
 
     // Initialize base cases for empty subtrees
-    for (int i = 1; i <= numKeys+1; i++) {
+    for(int i = 1; i <= numKeys+1; i++){
         expectedCost[i][i-1] = dummyKeys[i-1];
         cumulativeProbability[i][i-1] = dummyKeys[i-1];
     }
@@ -64,6 +63,7 @@ void OptimalBST(int probabilities[], int dummyKeys[], int numKeys){
     }
 }
 /*
+// pseudo code 
 Optimal_BST(p, q, n){
     Let e[1...n+1, 0...n], w[1...n+1, 0...n], and root[1...n, 1..n] be a new tables
     for i=1 to n+1
