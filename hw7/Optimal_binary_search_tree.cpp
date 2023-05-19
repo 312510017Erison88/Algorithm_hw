@@ -1,42 +1,67 @@
 #include <iostream>
-#include <climits>
+#include <float.h>
+#include <cstring>
 
 using namespace std;
 
-void OptimalBST(int probabilities[], int dummyKeys[], int numKeys);
+void OptimalBST(double* probabilities, double* dummyKeys, int numKeys, double** expectedCost, double** cumulative_P, int** root);
 
 int main(){
-    int probabilities[] = {0, 10, 20, 30, 40};  // probabilities
-    int dummyKeys[] = {5, 10, 15, 20, 25};  // dummy keys
+    double probabilities[] = {0.0, 0.15, 0.10, 0.05, 0.10, 0.20};  // probabilities
+    double dummyKeys[] = {0.05, 0.10, 0.05, 0.05, 0.05, 0.10};  // dummy keys
     int numKeys = sizeof(probabilities) / sizeof(probabilities[0]) - 1;  // number of keys
+    double** expectedCost;
+    double** cumulative_P;
+    int** root;
 
-    OptimalBST(probabilities, dummyKeys, numKeys);
+    expectedCost = new double *[numKeys+2];
+    cumulative_P = new double *[numKeys+2];
+    root = new int *[numKeys+1];
+    for(int i = 0; i < numKeys + 2; i++){
+    	expectedCost[i] = new double [numKeys + 1];
+    	cumulative_P[i] = new double [numKeys + 1];
+	}
+	for(int i = 0; i < numKeys + 1; i++){
+		root[i] = new int [numKeys + 1];
+	}
+
+	memset(expectedCost, 0.0, sizeof(expectedCost));
+	memset(cumulative_P, 0.0, sizeof(cumulative_P));
+	memset(root, 0, sizeof(root));
+
+    OptimalBST(probabilities, dummyKeys, numKeys, expectedCost, cumulative_P, root);
+
+    for(int i = 0; i < numKeys + 2; i++){
+		delete [] expectedCost[i];
+		delete [] cumulative_P[i];
+	}
+	for(int i = 0; i < numKeys + 1; i++){
+		delete [] root[i];
+	}
+	
+	delete [] expectedCost, cumulative_P, root;
 
     return 0;
 }
 
 
-void OptimalBST(int probabilities[], int dummyKeys[], int numKeys){
-    int expectedCost[numKeys+2][numKeys+1];  // expected cost table,    now numKeys is 4
-    int cumulativeProbability[numKeys+2][numKeys+1];  // cumulative probability table
-    int root[numKeys+1][numKeys+1];  // root table
-
+void OptimalBST(double* probabilities, double* dummyKeys, int numKeys, double** expectedCost, double** cumulative_P, int** root){
     // Initialize base cases for empty subtrees
     for(int i = 1; i <= numKeys+1; i++){
         expectedCost[i][i-1] = dummyKeys[i-1];
-        cumulativeProbability[i][i-1] = dummyKeys[i-1];
+        cumulative_P[i][i-1] = dummyKeys[i-1];
     }
 
     // Build optimal BST using dynamic programming
-    for(int l = 1; l <= numKeys; l++){
-        for(int i = 1; i <= numKeys - l + 1; i++){
-            int j = i + l - 1;
-            expectedCost[i][j] = INT_MAX;  // initialize expected cost to a large value
-            cumulativeProbability[i][j] = cumulativeProbability[i][j-1] + probabilities[j] + dummyKeys[j];
+    for(int l=1; l<=numKeys; l++){
+        for(int i=1; i<=numKeys-l+1; i++){
+            int j = i+l-1;
+            expectedCost[i][j] = DBL_MAX;  // initialize expected cost to a large value
+            cumulative_P[i][j] = cumulative_P[i][j-1] + probabilities[j] + dummyKeys[j];
 
             // Find the optimal root for the subtree rooted at i, j
-            for(int r = i; r <= j; r++){
-                int cost = expectedCost[i][r-1] + expectedCost[r+1][j] + cumulativeProbability[i][j];
+            for(int r=i; r<=j; r++){
+                double cost = expectedCost[i][r-1] + expectedCost[r+1][j] + cumulative_P[i][j];
                 if(cost <= expectedCost[i][j]){
                     expectedCost[i][j] = cost;
                     root[i][j] = r;
@@ -44,6 +69,10 @@ void OptimalBST(int probabilities[], int dummyKeys[], int numKeys){
             }
         }
     }
+
+    // Print the requirement
+    cout << "Smallest search cost = " << expectedCost[1][numKeys];
+	cout << "\nRoot = " << root[1][numKeys] << endl;
 
     // Print the expected cost and root table
     cout << "Expected Cost Table (e):" << endl;
