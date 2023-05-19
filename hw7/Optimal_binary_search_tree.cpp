@@ -5,41 +5,35 @@
 using namespace std;
 
 void OptimalBST(double* probabilities, double* dummyKeys, int numKeys, double** expectedCost, double** cumulative_P, int** root);
+void FreeMemory(double**& array, int size);
+void FreeMemory(int**& array, int size);
 
 int main(){
     double probabilities[] = {0.0, 0.15, 0.10, 0.05, 0.10, 0.20};  // probabilities
     double dummyKeys[] = {0.05, 0.10, 0.05, 0.05, 0.05, 0.10};  // dummy keys
     int numKeys = sizeof(probabilities) / sizeof(probabilities[0]) - 1;  // number of keys
-    double** expectedCost;
-    double** cumulative_P;
-    int** root;
 
-    expectedCost = new double *[numKeys+2];
-    cumulative_P = new double *[numKeys+2];
-    root = new int *[numKeys+1];
-    for(int i = 0; i < numKeys + 2; i++){
-    	expectedCost[i] = new double [numKeys + 1];
-    	cumulative_P[i] = new double [numKeys + 1];
+    double** expectedCost = new double*[numKeys+2];
+    double** cumulative_P = new double*[numKeys+2];
+    int** root = new int* [numKeys+1];
+
+    for(int i=0; i<numKeys+2; i++){
+    	expectedCost[i] = new double[numKeys+1];
+    	cumulative_P[i] = new double[numKeys+1];
 	}
-	for(int i = 0; i < numKeys + 1; i++){
-		root[i] = new int [numKeys + 1];
+	for(int i=0; i<numKeys+1; i++){
+		root[i] = new int[numKeys+1];
 	}
 
-	memset(expectedCost, 0.0, sizeof(expectedCost));
-	memset(cumulative_P, 0.0, sizeof(cumulative_P));
-	memset(root, 0, sizeof(root));
+	memset(expectedCost, 0.0, sizeof(expectedCost));    // Initialize the expectedCost
+	memset(cumulative_P, 0.0, sizeof(cumulative_P));    // Initialize the cumulative Propability
+	memset(root, 0, sizeof(root));                      // Initialize the root
 
     OptimalBST(probabilities, dummyKeys, numKeys, expectedCost, cumulative_P, root);
 
-    for(int i = 0; i < numKeys + 2; i++){
-		delete [] expectedCost[i];
-		delete [] cumulative_P[i];
-	}
-	for(int i = 0; i < numKeys + 1; i++){
-		delete [] root[i];
-	}
-	
-	delete [] expectedCost, cumulative_P, root;
+    FreeMemory(expectedCost, numKeys+2);
+    FreeMemory(cumulative_P, numKeys+2);
+    FreeMemory(root, numKeys+1);
 
     return 0;
 }
@@ -47,7 +41,7 @@ int main(){
 
 void OptimalBST(double* probabilities, double* dummyKeys, int numKeys, double** expectedCost, double** cumulative_P, int** root){
     // Initialize base cases for empty subtrees
-    for(int i = 1; i <= numKeys+1; i++){
+    for(int i=1; i<=numKeys+1; i++){
         expectedCost[i][i-1] = dummyKeys[i-1];
         cumulative_P[i][i-1] = dummyKeys[i-1];
     }
@@ -74,40 +68,38 @@ void OptimalBST(double* probabilities, double* dummyKeys, int numKeys, double** 
     cout << "Smallest search cost = " << expectedCost[1][numKeys];
 	cout << "\nRoot = " << root[1][numKeys] << endl;
 
+    /*
     // Print the expected cost and root table
     cout << "Expected Cost Table (e):" << endl;
-    for(int i = 1; i <= numKeys+1; i++){
-        for(int j = 0; j <= numKeys; j++){
+    for(int i=1; i<=numKeys+1; i++){
+        for(int j=0; j<=numKeys; j++){
             cout << expectedCost[i][j] << "\t";
         }
         cout << endl;
     }
 
     cout << "\nRoot Table (root):" << endl;
-    for(int i = 1; i <= numKeys; i++){
-        for(int j = 1; j <= numKeys; j++){
+    for(int i=1; i<=numKeys; i++){
+        for(int j=1; j<=numKeys; j++){
             cout << root[i][j] << "\t";
         }
         cout << endl;
     }
+    */
 }
-/*
-// pseudo code 
-Optimal_BST(p, q, n){
-    Let e[1...n+1, 0...n], w[1...n+1, 0...n], and root[1...n, 1..n] be a new tables
-    for i=1 to n+1
-        e[i, i-1] = qi-1
-        w[i, i-1] = qi-1
-    for l=1 to n
-        for i=1 to n-l-1
-            j = i+l-1
-            e[i,j] = 1000000
-            w[i,j] = w[i, j-1] + pj + qj
-            for r=i to j
-                t = e[i, r-1] + e[i, j-1] + w[i, j]
-                if t<=e[i,j]
-                    e[i, j] = t
-                    root[i,j] r
-    return e and root
+
+void FreeMemory(double**& array, int size){
+    for(int i=0; i<size; i++){
+        delete[] array[i];
+    }
+    delete[] array;
+    array = NULL;
 }
-*/
+
+void FreeMemory(int**& array, int size){
+    for(int i=0; i<size; i++){
+        delete[] array[i];
+    }
+    delete[] array;
+    array = NULL;
+}
