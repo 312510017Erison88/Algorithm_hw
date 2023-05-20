@@ -18,16 +18,12 @@ int main(){
     int** root = new int* [numKeys+1];
 
     for(int i=0; i<numKeys+2; i++){
-    	expectedCost[i] = new double[numKeys+1];
-    	cumulative_P[i] = new double[numKeys+1];
+    	expectedCost[i] = new double[numKeys+1]();  // () is to initialize the element to zero
+    	cumulative_P[i] = new double[numKeys+1]();  // () is to initialize the element to zero
 	}
 	for(int i=0; i<numKeys+1; i++){
-		root[i] = new int[numKeys+1];
+		root[i] = new int[numKeys+1]();
 	}
-
-	memset(expectedCost, 0.0, sizeof(expectedCost));    // Initialize the expectedCost
-	memset(cumulative_P, 0.0, sizeof(cumulative_P));    // Initialize the cumulative Propability
-	memset(root, 0, sizeof(root));                      // Initialize the root
 
     OptimalBST(probabilities, dummyKeys, numKeys, expectedCost, cumulative_P, root);
 
@@ -56,7 +52,7 @@ void OptimalBST(double* probabilities, double* dummyKeys, int numKeys, double** 
             // Find the optimal root for the subtree rooted at i, j
             for(int r=i; r<=j; r++){
                 double cost = expectedCost[i][r-1] + expectedCost[r+1][j] + cumulative_P[i][j];
-                if(cost <= expectedCost[i][j]){
+                if(cost < expectedCost[i][j]){
                     expectedCost[i][j] = cost;
                     root[i][j] = r;
                 }
@@ -68,7 +64,7 @@ void OptimalBST(double* probabilities, double* dummyKeys, int numKeys, double** 
     cout << "Smallest search cost = " << expectedCost[1][numKeys];
 	cout << "\nRoot = " << root[1][numKeys] << endl;
 
-    /*
+    
     // Print the expected cost and root table
     cout << "Expected Cost Table (e):" << endl;
     for(int i=1; i<=numKeys+1; i++){
@@ -85,7 +81,8 @@ void OptimalBST(double* probabilities, double* dummyKeys, int numKeys, double** 
         }
         cout << endl;
     }
-    */
+    
+    
 }
 
 void FreeMemory(double**& array, int size){
