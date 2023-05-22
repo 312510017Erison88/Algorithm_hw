@@ -127,7 +127,7 @@ node* minimum(node* x){
 
 node* successor(node* x){
     if(x->right != NULL){
-        return successor(x->right);
+        return minimum(x->right);
     }
     else{
         node* y = x->parent;
@@ -141,7 +141,7 @@ node* successor(node* x){
 
 node* predecessor(node* x){
     if(x->left != NULL){
-        return predecessor(x->left);
+        return maximum(x->left);
     }
     else{
         node* y = x->parent;
