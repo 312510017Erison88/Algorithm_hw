@@ -33,16 +33,6 @@ int main(){
     graph[3].push_back(4);
     graph[4].push_back(3);
 
-    /*
-    {
-        {1, 2},     // Vertex 0 is connected to vertices 1 and 2
-        {0, 2, 3},  // Vertex 1 is connected to vertices 0, 2, and 3
-        {0, 1, 3},  // Vertex 2 is connected to vertices 0, 1, and 3
-        {1, 2, 4},  // Vertex 3 is connected to vertices 1, 2, and 4
-        {3}         // Vertex 4 is connected to vertex 3
-    };
-    */
-
     int startVertex = 0;  // Starting vertex for BFS
 
     BFS(graph, startVertex);
