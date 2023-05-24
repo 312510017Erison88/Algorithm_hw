@@ -2,6 +2,7 @@
 #include <vector>
 #include <queue>
 #include <limits>
+#include <climits>
 
 using namespace std;
 
@@ -31,6 +32,7 @@ int main(){
     graph[3].push_back(2);
     graph[3].push_back(4);
     graph[4].push_back(3);
+
     /*
     {
         {1, 2},     // Vertex 0 is connected to vertices 1 and 2
@@ -62,9 +64,9 @@ void BFS(vector<vector<int> >& graph, int start){
     int numVertices = graph.size();
     vector<Vertex> vertices(numVertices);
 
-    for (int u = 0; u < numVertices; u++){
+    for(int u = 0; u < numVertices; u++){
         vertices[u].color = 0;  // white
-        vertices[u].distance = numeric_limits<int>::max();
+        vertices[u].distance = INT_MAX;
         vertices[u].parent = -1;  // NIL
     }
 
@@ -77,7 +79,7 @@ void BFS(vector<vector<int> >& graph, int start){
     while(!queue.empty()){
         int u = dequeue(queue);
 
-        for(vector<int>::iterator it = graph[u].begin(); it != graph[u].end(); ++it){   // find nearest neighbor from that vertex
+        for(vector<int>::iterator it = graph[u].begin(); it != graph[u].end(); it++){   // find nearest neighbor from that vertex
             int v = *it;
             if (vertices[v].color == 0){  // white
                 vertices[v].color = 1;  // gray
@@ -86,7 +88,6 @@ void BFS(vector<vector<int> >& graph, int start){
                 enqueue(queue, v);
             }
         }
-
         vertices[u].color = 2;  // black
     }
 
