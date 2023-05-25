@@ -5,6 +5,7 @@
 #include <limits>
 #include <utility>
 #include <algorithm>
+#include <climits>
 
 using namespace std;
 
@@ -15,7 +16,7 @@ const int TRAP = 2;
 struct Point {
     int x;
     int y;
-    Point() : x(0), y(0) {}
+    Point() : x(0), y(0) {} // constructor
     Point(int xVal, int yVal) : x(xVal), y(yVal) {}
 };
 
@@ -31,9 +32,13 @@ int shortestPath(vector<vector<int> >& maze, Point start, Point end) {
     int numRows = maze.size();
     int numCols = maze[0].size();
 
-    vector<vector<int> > distance(numRows, vector<int>(numCols, numeric_limits<int>::max()));
-    vector<vector<Point> > parent(numRows, vector<Point>(numCols, Point(-1, -1)));
-
+    vector<vector<int> > distance(numRows, vector<int>(numCols, INT_MAX));
+    vector<vector<Point> > parent(numRows, vector<Point>(numCols));
+    for (int i = 0; i < numRows; i++) {
+        for (int j = 0; j < numCols; j++) {
+            parent[i][j] = Point(-1, -1);
+        }
+    }
 
     distance[start.x][start.y] = 0;
 
@@ -41,6 +46,10 @@ int shortestPath(vector<vector<int> >& maze, Point start, Point end) {
     q.push(start);
 
     while (!q.empty()) {
+        if (q.empty()) {
+            // 若佇列為空，則中止迴圈
+            break;
+        }
         Point current = q.front();
         q.pop();
 
@@ -143,7 +152,7 @@ int main() {
     // Find the shortest path
     int shortest = shortestPath(maze, start, end);
 
-    if (shortest == numeric_limits<int>::max()) {
+    if (shortest == INT_MAX) {
         cout << "No path found to reach the destination." << endl;
     } else {
         cout << "Shortest path length: " << shortest << endl;
