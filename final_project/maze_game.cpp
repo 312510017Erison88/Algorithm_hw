@@ -46,10 +46,6 @@ int shortestPath(vector<vector<int> >& maze, Point start, Point end) {
     q.push(start);
 
     while (!q.empty()) {
-        if (q.empty()) {
-            // 若佇列為空，則中止迴圈
-            break;
-        }
         Point current = q.front();
         q.pop();
 
@@ -57,10 +53,11 @@ int shortestPath(vector<vector<int> >& maze, Point start, Point end) {
         int y = current.y;
 
         // Check if reached the destination
-        if (x == end.x && y == end.y)
+        if (x == end.x && y == end.y){
             break;
+        }
 
-        // Possible moves: up, down, left, right
+        // Possible moves: up, down, left, right////left, right, down, up
         int dx[4] = { -1, 1, 0, 0 };
         int dy[4] = { 0, 0, -1, 1 };
 
@@ -108,7 +105,7 @@ int shortestPath(vector<vector<int> >& maze, Point start, Point end) {
 
     // Write path coordinates
     for (vector<Point>::iterator it = path.begin(); it != path.end(); ++it) {
-        outputFile << "(" << it->x << "," << it->y << ")" << endl;
+        outputFile << "(" << (it->x)+1 << "," << (it->y)+1 << ")" << endl;
     }
 
     outputFile.close();

@@ -18,4 +18,4 @@ check:
 	$(CHECKCC) $(CHECKFLAGS) ./0811549 input.in output.out
 
 clean:
-	rm -rf *.o 0811549 *.out
+	rm -rf *.o 0811549 *.out output.txt
