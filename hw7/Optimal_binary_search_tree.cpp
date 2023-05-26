@@ -5,6 +5,7 @@
 using namespace std;
 
 void OptimalBST(double* probabilities, double* dummyKeys, int numKeys, double** expectedCost, double** cumulative_P, int** root);
+inline void Print_BST(int **r, int i, int j);
 void FreeMemory(double**& array, int size);
 void FreeMemory(int**& array, int size);
 
@@ -61,8 +62,8 @@ void OptimalBST(double* probabilities, double* dummyKeys, int numKeys, double** 
     }
 
     // Print the requirement
-    cout << "Smallest search cost = " << expectedCost[1][numKeys];
-	cout << "\nRoot = " << root[1][numKeys] << endl;
+    cout << "Smallest search cost = " << expectedCost[1][numKeys] << endl;
+	cout << "Root = " << root[1][numKeys] << endl;
 
     
     // Print the expected cost and root table
@@ -81,8 +82,26 @@ void OptimalBST(double* probabilities, double* dummyKeys, int numKeys, double** 
         }
         cout << endl;
     }
-    
-    
+    Print_BST(root, 1, numKeys);
+}
+
+inline void Print_BST(int **r, int i, int j){
+	if(i < r[i][j]){
+		int a = r[i][j];
+		cout << "k" << r[i][a-1] << " is the left child of k" << r[i][j] << endl;
+		Print_BST(r, i, a-1);
+	}
+	else{
+		cout << "d" << r[i][j]-1 <<" is the left child of k" << r[i][j] << endl;
+	}
+	if(j > r[i][j]){
+		int a = r[i][j];
+		cout << "k" << r[a+1][j] << " is the rightchild of k" << r[i][j] << endl;
+		Print_BST(r, a+1, j);
+	}
+	else{
+		cout << "d" << j << " is the right child of k" << r[i][j] << endl;
+	}
 }
 
 void FreeMemory(double**& array, int size){
