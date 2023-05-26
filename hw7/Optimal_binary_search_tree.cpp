@@ -96,7 +96,7 @@ inline void Print_BST(int **r, int i, int j){
 	}
 	if(j > r[i][j]){
 		int a = r[i][j];
-		cout << "k" << r[a+1][j] << " is the rightchild of k" << r[i][j] << endl;
+		cout << "k" << r[a+1][j] << " is the right child of k" << r[i][j] << endl;
 		Print_BST(r, a+1, j);
 	}
 	else{
