@@ -28,7 +28,7 @@ bool isRoad(vector<vector<int> >& maze, int x, int y) {
     return (maze[x][y] == ROAD || maze[x][y] == TRAP);
 }
 
-int shortestPath(vector<vector<int> >& maze, Point start, Point end) {
+int shortestPath(vector<vector<int> >& maze, Point start, Point end, ofstream& outputFile) {
     int numRows = maze.size();
     int numCols = maze[0].size();
 
@@ -90,7 +90,6 @@ int shortestPath(vector<vector<int> >& maze, Point start, Point end) {
     reverse(path.begin(), path.end());
 
     // Write output to file
-    ofstream outputFile("output.txt");
     if (!outputFile) {
         cout << "Unable to open the output file." << endl;
         return 1;
@@ -113,9 +112,12 @@ int shortestPath(vector<vector<int> >& maze, Point start, Point end) {
     return 0;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
     // Read input from file
-    ifstream inputFile("input.txt");
+    ifstream inputFile;
+    ofstream outputFile;
+    
+    inputFile.open(argv[1], ios::in);
     if (inputFile){
     	cout << "read file success!" << endl;
 	}
@@ -147,7 +149,9 @@ int main() {
     end.y = numCols - 1;
 
     // Find the shortest path
-    int shortest = shortestPath(maze, start, end);
+    outputFile.open(argv[2], ios::out);
+    int shortest = shortestPath(maze, start, end, outputFile);
+    outputFile.close();
 
     if (shortest == INT_MAX) {
         cout << "No path found to reach the destination." << endl;
