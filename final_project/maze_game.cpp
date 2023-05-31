@@ -90,7 +90,7 @@ int shortestPath(vector<vector<int> >& maze, Point start, Point end, ofstream& o
     reverse(path.begin(), path.end());
 
     // Write output to file
-    if (!outputFile) {
+    if (!outputFile){
         cout << "Unable to open the output file." << endl;
         return 1;
     }
@@ -105,6 +105,9 @@ int shortestPath(vector<vector<int> >& maze, Point start, Point end, ofstream& o
     // Write path coordinates
     for(vector<Point>::iterator it = path.begin(); it != path.end(); ++it){
         outputFile << "(" << (it->x)+1 << "," << (it->y)+1 << ")" << endl;
+        if(maze[it->x][it->y] == TRAP){
+            outputFile << "(" << (it->x) + 1 << "," << (it->y) + 1 << ")" << endl;
+        }
     }
 
     return stepCount;
