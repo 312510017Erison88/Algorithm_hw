@@ -206,9 +206,9 @@ void printNode(node* root){
     if(root == NULL){
         return;
     }
-    printNode(root->right);
-    cout << root->key << " ";
     printNode(root->left);
+    cout << root->key << " ";
+    printNode(root->right);
 }
 
 
