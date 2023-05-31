@@ -13,30 +13,30 @@ const int WALL = 0;
 const int ROAD = 1;
 const int TRAP = 2;
 
-struct Point {
+struct Point{
     int x;
     int y;
     Point() : x(0), y(0) {} // constructor
-    Point(int xVal, int yVal) : x(xVal), y(yVal) {}
+    Point(int xVal, int yVal) : x(xVal), y(yVal) {} // constructor
 };
 
-bool isValidMove(int x, int y, int numRows, int numCols) {
-    return (x >= 0 && x < numRows && y >= 0 && y < numCols);
+bool isValidMove(int x, int y, int numRows, int numCols){
+    return(x >= 0 && x < numRows && y >= 0 && y < numCols);
 }
 
 bool isRoad(vector<vector<int> >& maze, int x, int y) {
-    return (maze[x][y] == ROAD || maze[x][y] == TRAP);
+    return(maze[x][y] == ROAD || maze[x][y] == TRAP);
 }
 
-int shortestPath(vector<vector<int> >& maze, Point start, Point end, ofstream& outputFile) {
+int shortestPath(vector<vector<int> >& maze, Point start, Point end, ofstream& outputFile){
     int numRows = maze.size();
     int numCols = maze[0].size();
 
     vector<vector<int> > distance(numRows, vector<int>(numCols, INT_MAX));
     vector<vector<Point> > parent(numRows, vector<Point>(numCols));
-    for (int i = 0; i < numRows; i++) {
-        for (int j = 0; j < numCols; j++) {
-            parent[i][j] = Point(-1, -1);
+    for(int i = 0; i < numRows; i++){
+        for(int j = 0; j < numCols; j++){
+            parent[i][j] = Point(-1, -1);       // initial the value in parent is -1
         }
     }
 
@@ -45,7 +45,7 @@ int shortestPath(vector<vector<int> >& maze, Point start, Point end, ofstream& o
     queue<Point> q;
     q.push(start);
 
-    while (!q.empty()) {
+    while(!q.empty()){
         Point current = q.front();
         q.pop();
 
@@ -53,7 +53,7 @@ int shortestPath(vector<vector<int> >& maze, Point start, Point end, ofstream& o
         int y = current.y;
 
         // Check if reached the destination
-        if (x == end.x && y == end.y){
+        if(x == end.x && y == end.y){
             break;
         }
 
@@ -65,10 +65,10 @@ int shortestPath(vector<vector<int> >& maze, Point start, Point end, ofstream& o
             int newX = x + dx[i];
             int newY = y + dy[i];
 
-            if (isValidMove(newX, newY, numRows, numCols) && isRoad(maze, newX, newY)) {
+            if(isValidMove(newX, newY, numRows, numCols) && isRoad(maze, newX, newY)){
                 int newDistance = distance[x][y] + 1;
 
-                if (newDistance < distance[newX][newY]) {
+                if(newDistance < distance[newX][newY]){
                     distance[newX][newY] = newDistance;
                     parent[newX][newY].x = x;
 					parent[newX][newY].y = y;
@@ -81,7 +81,7 @@ int shortestPath(vector<vector<int> >& maze, Point start, Point end, ofstream& o
     // Backtrack to find the shortest path
     vector<Point> path;
     Point current = end;
-    while (current.x != -1 && current.y != -1) {
+    while(current.x != -1 && current.y != -1){
         path.push_back(current);
         current = parent[current.x][current.y];
     }
@@ -98,18 +98,16 @@ int shortestPath(vector<vector<int> >& maze, Point start, Point end, ofstream& o
     // Write pattern number
     outputFile << "pattern 1" << endl;
 
-        // Write step count
+    // Write step count
     int stepCount = path.size();
     outputFile << "step=" << stepCount << endl;
 
     // Write path coordinates
-    for (vector<Point>::iterator it = path.begin(); it != path.end(); ++it) {
+    for(vector<Point>::iterator it = path.begin(); it != path.end(); ++it){
         outputFile << "(" << (it->x)+1 << "," << (it->y)+1 << ")" << endl;
     }
 
-    outputFile.close();
-
-    return 0;
+    return stepCount;
 }
 
 int main(int argc, char *argv[]) {
@@ -131,9 +129,9 @@ int main(int argc, char *argv[]) {
     inputFile >> numRows >> numCols;
 
     // Read maze data
-    vector<vector<int> > maze(numRows, vector<int>(numCols));
-    for (int i = 0; i < numRows; i++) {
-        for (int j = 0; j < numCols; j++) {
+    vector<vector<int> > maze(numRows, vector<int>(numCols));   // initialize the maze size and set value to 0
+    for(int i = 0; i < numRows; i++){
+        for(int j = 0; j < numCols; j++){
             inputFile >> maze[i][j];
         }
     }
